@@ -76,7 +76,7 @@ public class Utilitaire{
            // Class<?> Class.forName(classename.get(i)) ;
             if(Class.forName(classename.get(i))!= null){
                 //Class.forName(classename.get(i)) = Class.forName(classename.get(i)); 
-                System.out.println(classename.get(i));
+                //System.out.println(classename.get(i));
                 Method[] methods=Class.forName(classename.get(i)).getDeclaredMethods();
                 for (int j = 0; j < methods.length; j++) {
                    if(methods[j].getAnnotation(Methods.class) != null){
@@ -84,14 +84,31 @@ public class Utilitaire{
                         //System.out.println(methods[j].getAnnotation(Methods.class).value());
                             Mapping map= new Mapping();
                             String clas= classename.get(i);
-                            String[] nom_classe=clas.split(".");
+                            //System.out.println(clas);
+                            int ind =0;
+                            char[] charclass = clas.toCharArray();
+                            for (int k = 0; k < charclass.length; k++) {
+                                if(charclass[k] == '.'){
+                                    ind =k;
+                                }
+                            }
+                            String nom_classe = "";
+                            for (int k = ind + 1; k < charclass.length; k++) {
+                                nom_classe =nom_classe + charclass[k];
+                            }
+
+                            //System.out.println(ind);
+                            System.out.println(nom_classe);
+
                             // System.out.println(classename.get(i));
                             // //System.out.println(nom_classe);
                             //System.out.println(nom_classe[nom_classe.length-1]);
-                            map.setClassName(classename.get(i));
+                           
+                            map.setClassName(nom_classe);
                             map.setMethod(methods[j].getName());
-                            System.out.println(map.getClassName());
-                            System.out.println(map.getMethod());
+                           
+                           // System.out.println(map.getClassName());
+                            //System.out.println(map.getMethod());
                             mappingUrls.put(methods[j].getAnnotation(Methods.class).value(), map);
                             System.out.println(mappingUrls);
 
@@ -105,12 +122,28 @@ public class Utilitaire{
      }
 
 
+     public Mapping  geMap(HashMap<String,Mapping> mappingUrls,String cle) throws Exception
+    {
+        Mapping map = new Mapping();
+        for( String key : mappingUrls.keySet()){
+            if(key.compareToIgnoreCase(cle)==0){
+              map  = mappingUrls.get(key);
+            }
+           
+           // System.out.println(key +"|" + value.getClassName() + " | " + value.getMethod());
+        }
+        return map;
+     }
+
+
 
      public void printHM(HashMap<String,Mapping> mappingUrls)
      {
         for( String key : mappingUrls.keySet()){
+            
             Mapping value = mappingUrls.get(key);
-            System.out.println(key +"|" + value.getClassName() + " | " + value.getMethod());
+
+            //System.out.println(key +"|" + value.getClassName() + " | " + value.getMethod());
 
         }
 

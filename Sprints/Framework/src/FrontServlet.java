@@ -25,14 +25,10 @@ public class FrontServlet extends HttpServlet
                     String paths = "D:/L2/S3/Reseaux/apache-tomcat-8/webapps/Script1/WEB-INF/classes/etu1836/framework/modele";
                     
                     mappingUrls= u.getHashmap( mappingUrls, paths);
-                 //   u.printHM(mappingUrls);
-                    for( String key : mappingUrls.keySet()){
-                       
-                            Mapping map = mappingUrls.get(key);
-                            out.println( "Key : "+key );
-                            out.println( map.getClassName() + " | " + map.getMethod());
-                       
-                    }
+                    u.printHM(mappingUrls);
+                    Mapping map = u.geMap(mappingUrls, meth);
+                    out.println( "Key : "+meth );
+                    out.println( map.getClassName() + " | " + map.getMethod());
                     
                 } catch (Exception e) {
                     e.printStackTrace();
