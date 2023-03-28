@@ -33,7 +33,7 @@ public class Utilitaire{
                   throw new Exception(pack+" n'existe pas");
             }
             File [] tables=folder.listFiles();
-            //pack = pack.replace("/", ".");
+            pack = pack.replace("\\", "/");
             String[] tabstr= pack.split("/");
             int ind=0;
             for (int i = 0; i < tabstr.length; i++) {
@@ -67,9 +67,11 @@ public class Utilitaire{
 
 
 
-    public HashMap<String,Mapping>  getHashmap(HashMap<String,Mapping> mappingUrls,String path) throws Exception
+    public HashMap<String,Mapping>  getHashmap(HashMap<String,Mapping> mappingUrls,ServletContext context) throws Exception
     {
      
+       
+        String path = context.getRealPath( "/WEB-INF/classes/etu1836/framework/modele");
         ArrayList <String> classename= this.get_AllClass(path);
         
         for (int i = 0; i < classename.size(); i++) {
