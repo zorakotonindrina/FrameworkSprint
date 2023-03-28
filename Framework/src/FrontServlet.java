@@ -2,11 +2,10 @@ package etu1836.framework.servlet;
 import java.sql.SQLException;
 import java.io.*;
 import javax.servlet.*;
+import etu1836.framework.Mapping;
+import etu1836.framework.Utilitaire;
 import javax.servlet.http.*;
 import java.util.*;
-import etu1836.framework.*;
-import etu1836.framework.Utilitaire;
-import etu1836.framework.Mapping;
 public class FrontServlet extends HttpServlet 
 {
     HashMap<String,Mapping> mappingUrls = new HashMap<>();
@@ -16,19 +15,24 @@ public class FrontServlet extends HttpServlet
                     response.setContentType("text/plain");
                     PrintWriter out = response.getWriter();
                     Utilitaire u = new Utilitaire();
+                    ServletContext context= getServletContext();
                     String path= u.getPath(request); //Premiere methode
                     System.out.println(path);
                     String meth = u.getMethode(request); // Deuxieme methode  
                     System.out.println(meth);
                     out.println(path);
                     out.println(meth);
-                    String paths = "D:/L2/S3/Reseaux/apache-tomcat-8/webapps/Script1/WEB-INF/classes/etu1836/framework/modele";
                     
-                    mappingUrls= u.getHashmap( mappingUrls, paths);
-                    u.printHM(mappingUrls);
-                    Mapping map = u.geMap(mappingUrls, meth);
-                    out.println( "Key : "+meth );
-                    out.println( map.getClassName() + " | " + map.getMethod());
+                    
+                    mappingUrls= u.getHashmap( mappingUrls,context);
+                 //   u.printHM(mappingUrls);
+                    for( String key : mappingUrls.keySet()){
+                       
+                            Mapping map = mappingUrls.get(key);
+                            out.println( "Key : "+key );
+                            out.println( map.getClassName() + " | " + map.getMethod());
+                       
+                    }
                     
                 } catch (Exception e) {
                     e.printStackTrace();
