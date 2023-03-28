@@ -2,13 +2,10 @@ package etu1836.framework;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import etu1836.framework.Mapping;
-import etu1836.framework.modele.*;
 import java.util.*;
 import java.sql.SQLException;
 import java.io.*;
-import etu1836.framework.Mapping;
-
-import annotation.*;
+import etu1836.framework.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 public class Utilitaire{
@@ -28,12 +25,14 @@ public class Utilitaire{
 
     public ArrayList<String> get_AllClass(String pack)throws Exception
     {
+            System.out.println(pack);
+           
             File folder=new File(pack);
             if(folder.exists()==false){
                   throw new Exception(pack+" n'existe pas");
             }
             File [] tables=folder.listFiles();
-            //pack = pack.replace("/", ".");
+            pack = pack.replace("\\", "/");
             String[] tabstr= pack.split("/");
             int ind=0;
             for (int i = 0; i < tabstr.length; i++) {
@@ -67,11 +66,12 @@ public class Utilitaire{
 
 
 
-    public HashMap<String,Mapping>  getHashmap(HashMap<String,Mapping> mappingUrls,String path) throws Exception
+    public HashMap<String,Mapping>  getHashmap(HashMap<String,Mapping> mappingUrls,ServletContext context) throws Exception
     {
      
-        ArrayList <String> classename= this.get_AllClass(path);
-        
+       
+         String path = context.getRealPath( "/WEB-INF/classes/etu1836/framework/modele");
+         ArrayList <String> classename= this.get_AllClass(path);
         for (int i = 0; i < classename.size(); i++) {
            // Class<?> Class.forName(classename.get(i)) ;
             if(Class.forName(classename.get(i))!= null){
@@ -104,7 +104,7 @@ public class Utilitaire{
                             // //System.out.println(nom_classe);
                             //System.out.println(nom_classe[nom_classe.length-1]);
                            
-                            map.setClassName(nom_classe);
+                            map.setClassName(classename.get(i));
                             map.setMethod(methods[j].getName());
                            
                            // System.out.println(map.getClassName());
@@ -129,7 +129,6 @@ public class Utilitaire{
             if(key.compareToIgnoreCase(cle)==0){
               map  = mappingUrls.get(key);
             }
-           
            // System.out.println(key +"|" + value.getClassName() + " | " + value.getMethod());
         }
         return map;
@@ -148,4 +147,8 @@ public class Utilitaire{
         }
 
      }
+
+
+
+
 }
